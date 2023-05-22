@@ -14,7 +14,6 @@ public class ReticleBehaviour : MonoBehaviour
 
     public ARPlane CurrentPlane;
 
-    // Start is called before the first frame update
     private void Start()
     {
         Child = transform.GetChild(0).gameObject;
@@ -31,10 +30,10 @@ public class ReticleBehaviour : MonoBehaviour
         ARRaycastHit? hit = null;
         if (hits.Count > 0)
         {
-            // If you don't have a locked plane already...
+            // If you don't have a locked plane already
             var lockedPlane = DrivingSurfaceManager.LockedPlane;
             hit = lockedPlane == null
-                // ... use the first hit in `hits`.
+                // use the first hit in `hits`.
                 ? hits[0]
                 // Otherwise use the locked plane, if it's there.
                 : hits.SingleOrDefault(x => x.trackableId == lockedPlane.trackableId);
