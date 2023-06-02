@@ -5,9 +5,10 @@ using UnityEngine.XR.ARFoundation;
 
 public class PackageSpawner : MonoBehaviour
 {
-    public DrivingSurfaceManager DrivingSurfaceManager;
-    public PackageBehaviour Package;
-    public GameObject PackagePrefab;
+    [SerializeField] DrivingSurfaceManager DrivingSurfaceManager;
+    [SerializeField] GameObject PackagePrefab;
+    [SerializeField] UIManager uiManager;
+    private PackageBehaviour Package;
 
     public static Vector3 RandomInTriangle(Vector3 v1, Vector3 v2)
     {
@@ -24,7 +25,6 @@ public class PackageSpawner : MonoBehaviour
 
     public static Vector3 FindRandomLocation(ARPlane plane)
     {
-        // Select random triangle in Mesh
         var mesh = plane.GetComponent<ARPlaneMeshVisualizer>().mesh;
         var triangles = mesh.triangles;
         var triangle = triangles[(int)Random.Range(0, triangles.Length - 1)] / 3 * 3;
@@ -39,7 +39,7 @@ public class PackageSpawner : MonoBehaviour
     {
         var packageClone = GameObject.Instantiate(PackagePrefab);
         packageClone.transform.position = FindRandomLocation(plane);
-
+        uiManager.IncreaseScore();
         Package = packageClone.GetComponent<PackageBehaviour>();
     }
 
@@ -54,7 +54,8 @@ public class PackageSpawner : MonoBehaviour
             }
 
             var packagePosition = Package.gameObject.transform.position;
-            packagePosition.Set(packagePosition.x, lockedPlane.center.y, packagePosition.z);
+            packagePosition.Set(packagePosition.x, lockedPlane.center.y + 0.2f, packagePosition.z);
+
         }
     }
 }

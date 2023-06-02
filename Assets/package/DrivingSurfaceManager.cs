@@ -5,9 +5,12 @@ using UnityEngine.XR.ARFoundation;
 
 public class DrivingSurfaceManager : MonoBehaviour
 {
-    public ARPlaneManager PlaneManager;
-    public ARRaycastManager RaycastManager;
-    public ARPlane LockedPlane;
+    private ARPlaneManager _planeManager;
+    public ARPlaneManager PlaneManager { get => _planeManager; set => _planeManager = value; }
+    private ARRaycastManager _raycastManager;
+    public ARRaycastManager RaycastManager { get => _raycastManager; set => _raycastManager = value; }
+    private ARPlane _lockedPlane;
+    public ARPlane LockedPlane { get => _lockedPlane; set => _lockedPlane = value; }
 
     public void LockPlane(ARPlane keepPlane)
     {

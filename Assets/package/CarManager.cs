@@ -3,28 +3,35 @@
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
-/**
- * Spawns a <see cref="CarBehaviour"/> when a plane is tapped.
- */
 public class CarManager : MonoBehaviour
 {
-    public GameObject CarPrefab;
-    public ReticleBehaviour Reticle;
-    public DrivingSurfaceManager DrivingSurfaceManager;
-
-    public CarBehaviour Car;
+    [SerializeField] GameObject CarPrefab;
+    [SerializeField] ReticleBehaviour Reticle;
+    [SerializeField] DrivingSurfaceManager DrivingSurfaceManager;
+    [SerializeField] UIManager uiManager;
+    [SerializeField] ParticleSystem PackageParticle;
+    [SerializeField] ParticleSystem StoneParticle;
+    private CarBehaviour Car;
 
     private void Update()
     {
         if (Car == null && WasTapped() && Reticle.CurrentPlane != null)
         {
-            // Spawn our car at the reticle location.
             var obj = GameObject.Instantiate(CarPrefab);
             Car = obj.GetComponent<CarBehaviour>();
             Car.Reticle = Reticle;
+            Car.SetPackageParticle(PackageParticle);
+            Car.SetStoneParticle(StoneParticle);
             Car.transform.position = Reticle.transform.position;
             DrivingSurfaceManager.LockPlane(Reticle.CurrentPlane);
+            uiManager.setGameStarted(true);
         }
+        if (Car != null && Car.GetGameOver() == true)
+        {
+            uiManager.GameOver();
+            Car.SetSpeed(0.0f);
+        }
+
     }
 
     private bool WasTapped()
@@ -46,5 +53,11 @@ public class CarManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void setCarGameOver()
+    {
+        Car.SetGameOver(false);
+        Car.SetSpeed(1.0f);
     }
 }
